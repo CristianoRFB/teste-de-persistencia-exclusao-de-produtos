@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Produto</title><link rel="stylesheet" href="/css/styles.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Produto</title><link rel="stylesheet" href="/css/styles.css"><link rel="stylesheet" href="/css/product-workspace.css"></head>
 <body>
 <div th:replace="~{fragments/nav :: admin}"></div>
 <div class="page-header"><h1 th:text="${produto.idProduto == null ? 'Novo Produto' : 'Editar Produto'}"></h1><p>Preencha os dados do produto</p></div>

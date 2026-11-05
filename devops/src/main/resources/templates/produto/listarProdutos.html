@@ -1,67 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produtos ativos | DevOpsCR</title>
+  <link rel="stylesheet" href="/css/styles.css"><link rel="stylesheet" href="/css/product-workspace.css">
 </head>
-
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">Sistema DevOps</div>
-            <ul class="nav-links">
-                <li><a href="/home">Início</a></li>
-                <li><a href="/produto/listar">Produtos</a></li>
-                <li><a href="/pedido/listar">Pedidos</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="page-header">
-        <h1>Produtos</h1>
-        <p>Gerencie o catálogo e o estoque</p>
-    </div>
-    <div class="container">
-        <div class="alerta" th:if="${mensagem}" th:text="${mensagem}"></div>
-        <div class="alerta" th:if="${erro}" th:text="${erro}"></div>
-        <div class="table-container">
-            <div class="table-header">
-                <h2>Lista de Produtos</h2><a class="btn btn-primary" href="/produto/formulario">Novo Produto</a>
-            </div>
-            <div style="overflow-x:auto">
-                <table class="tabela">
-                    <thead>
-                        <tr>
-                            <th>ID</th><th>Imagem</th>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Preço</th>
-                            <th>Estoque</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="produto : ${produtos}">
-                            <td th:text="${produto.idProduto}"></td><td><div class="product-thumb-wrap"><img th:if="${produto.imagem != null}" class="product-thumb" th:src="@{/produto/{id}/imagem(id=${produto.idProduto})}" th:alt="${produto.nomeProduto}"><span th:unless="${produto.imagem != null}" class="product-placeholder">Sem imagem</span></div></td>
-                            <td th:text="${produto.nomeProduto}"></td>
-                            <td th:text="${produto.descricaoProduto}"></td>
-                            <td th:text="${#numbers.formatCurrency(produto.precoProduto)}"></td>
-                            <td th:text="${produto.quantidadeEstoque}"></td>
-                            <td>
-                                <div class="acoes"><a class="btn btn-small btn-info"
-                                        th:href="@{/produto/editar/{id}(id=${produto.idProduto})}">Editar</a><form th:action="@{/produto/deletar/{id}(id=${produto.idProduto})}" method="post" class="inline-form" onsubmit="return confirm('Confirma a exclusão deste registro?')"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-small btn-danger" type="submit">Deletar</button></form></div>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(produtos)}">
-                            <td colspan="7">Nenhum produto cadastrado.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
+<div th:replace="~{fragments/nav :: admin}"></div>
+<header class="page-header product-hero"><div class="container">
+ <span class="product-kicker">PAINEL / GESTÃO DE CATÁLOGO</span>
+ <h1>Produtos ativos</h1><p>Cadastre, edite e arquive itens sem perder o histórico de vendas.</p>
+</div></header>
+<main class="container product-management" id="conteudo">
+ <div class="product-notice" role="status" th:if="${mensagem}" th:text="${mensagem}"></div>
+ <div class="product-notice product-notice-error" role="alert" th:if="${erro}" th:text="${erro}"></div>
+ <section class="product-surface" aria-labelledby="catalog-title">
+  <div class="product-toolbar">
+   <div><span class="product-kicker">INVENTÁRIO</span><h2 id="catalog-title">Controle de produtos</h2><p th:text="|${#lists.size(produtos)} produto(s) disponível(is) no catálogo|">Lista de produtos</p></div>
+   <div class="product-toolbar-actions"><a class="btn btn-outline-product" href="/produto/arquivados">Ver arquivados</a><a class="btn btn-primary" href="/produto/formulario">+ Novo produto</a></div>
+  </div>
+  <div class="product-help"><strong>Exclusão segura</strong><span>Arquivar retira o produto da loja, mas mantém seus dados no banco para preservar pedidos anteriores.</span></div>
+  <div class="product-search-row"><label for="filtro-produto">Filtrar produtos</label><input type="search" id="filtro-produto" placeholder="Buscar pelo nome ou descrição" autocomplete="off"></div>
+  <div class="product-table-scroll">
+  <table class="tabela product-table" id="tabela-produtos">
+   <thead><tr><th scope="col">Produto</th><th scope="col">Descrição</th><th scope="col">Preço</th><th scope="col">Estoque</th><th scope="col">Ações</th></tr></thead>
+   <tbody>
+    <tr th:each="produto : ${produtos}" class="product-row">
+     <td><div class="product-name-cell"><div class="product-thumb-wrap">
+       <img th:if="${produto.imagem != null}" th:src="@{/produto/{id}/imagem(id=${produto.idProduto})}" th:alt="|Imagem de ${produto.nomeProduto}|" class="product-thumb">
+       <span th:unless="${produto.imagem != null}" class="product-thumb-fallback" aria-hidden="true">P</span>
+      </div><div><strong th:text="${produto.nomeProduto}">Nome</strong><small th:text="|ID #${produto.idProduto}|">ID</small></div></div></td>
+     <td class="product-description" th:text="${produto.descricaoProduto}">Descrição</td>
+     <td class="product-price" th:text="${#numbers.formatCurrency(produto.precoProduto)}">R$ 0,00</td>
+     <td><span class="stock-pill" th:classappend="${produto.quantidadeEstoque <= 0} ? ' stock-empty' : ''" th:text="${produto.quantidadeEstoque <= 0} ? 'Sem estoque' : | ${produto.quantidadeEstoque} unidade(s)|">Estoque</span></td>
+     <td><div class="product-actions"><a class="btn btn-small btn-outline-product" th:href="@{/produto/editar/{id}(id=${produto.idProduto})}" th:aria-label="|Editar ${produto.nomeProduto}|">Editar</a>
+      <form th:action="@{/produto/deletar/{id}(id=${produto.idProduto})}" method="post" onsubmit="return confirm('Arquivar este produto? Ele sairá do catálogo, mas os pedidos anteriores serão preservados.');">
+       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+       <button class="btn btn-small btn-danger" type="submit" th:aria-label="|Arquivar ${produto.nomeProduto}|">Arquivar</button>
+      </form></div></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(produtos)}"><td colspan="5"><div class="product-empty"><strong>Seu catálogo está vazio</strong><p>Cadastre o primeiro produto para começar.</p><a class="btn btn-primary" href="/produto/formulario">Cadastrar produto</a></div></td></tr>
+   </tbody>
+  </table></div>
+  <div class="product-empty" id="sem-resultado" hidden><strong>Nenhum resultado</strong><p>Tente outro termo de busca.</p></div>
+ </section>
+</main>
+<div th:replace="~{fragments/nav :: rodape}"></div>
+<script>
+(function(){const input=document.querySelector('#filtro-produto');const rows=[...document.querySelectorAll('.product-row')];const empty=document.querySelector('#sem-resultado');input.addEventListener('input',()=>{const term=input.value.trim().toLocaleLowerCase('pt-BR');let shown=0;for(const row of rows){const hit=row.textContent.toLocaleLowerCase('pt-BR').includes(term);row.hidden=!hit;if(hit)shown++;}empty.hidden=shown!==0||rows.length===0;});})();
+</script>
+</body></html>
