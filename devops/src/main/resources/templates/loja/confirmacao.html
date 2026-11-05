@@ -1,0 +1,9 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pedido | DevOpsCR</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div th:replace="~{fragments/nav :: loja}"></div><main class="container">
+ <nav class="breadcrumb" aria-label="Trilha de navegação"><a href="/loja/pedidos">Meus pedidos</a> <span>/</span> <span th:text="${'#' + pedido.idPedido}">Pedido</span></nav>
+ <section class="confirm-card"><span class="eyebrow">Pedido registrado</span><h1 th:text="${'Pedido #' + pedido.idPedido}">Pedido</h1><p>Seu pedido de demonstração foi registrado. Não houve pagamento online.</p>
+  <div class="order-meta"><div><span>Situação</span><strong th:text="${pedido.status}">PENDENTE</strong></div><div><span>Data</span><strong th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy')}"></strong></div><div><span>Total</span><strong th:text="${#numbers.formatCurrency(pedido.valorTotal)}">R$ 0</strong></div></div>
+  <h2>Itens</h2><ul class="order-items"><li th:each="item : ${pedido.itens}"><span th:text="${item.produto.nomeProduto + ' × ' + item.quantidade}">Produto</span><strong th:text="${#numbers.formatCurrency(item.subtotal)}">R$ 0</strong></li></ul>
+  <div class="form-actions"><a href="/loja/pedidos" class="btn btn-secondary">Ver todos os pedidos</a><a href="/loja" class="btn btn-primary">Continuar comprando</a></div>
+ </section>
+</main><div th:replace="~{fragments/nav :: rodape}"></div></body></html>

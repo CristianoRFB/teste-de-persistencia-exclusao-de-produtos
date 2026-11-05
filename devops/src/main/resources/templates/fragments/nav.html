@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="loja" aria-label="Navegação da loja">
+ <div class="nav-container">
+  <a class="logo" href="/loja">DevOpsCR <span class="brand-mark">/ Loja</span></a>
+  <ul class="nav-links"><li><a href="/loja">Catálogo</a></li><li><a href="/loja/carrinho">Carrinho</a></li><li><a href="/loja/pedidos">Meus pedidos</a></li>
+   <li><form th:action="@{/logout}" method="post"><button class="btn btn-small btn-secondary" type="submit">Sair</button></form></li>
+  </ul>
+ </div>
+</nav>
+<nav th:fragment="admin" aria-label="Navegação administrativa">
+  <div class="nav-container">
+   <a class="logo" href="/home">DevOpsCR <span class="brand-mark">/ Admin</span></a>
+   <ul class="nav-links">
+    <li><a href="/home">Painel</a></li>
+    <li class="nav-menu"><details><summary>Gestão acadêmica</summary><div class="nav-menu-list"><a href="/aluno/listar">Alunos</a><a href="/curso/listar">Cursos</a><a href="/professor/listar">Professores</a><a href="/disciplina/listar">Disciplinas</a></div></details></li>
+    <li class="nav-menu"><details><summary>Gestão comercial</summary><div class="nav-menu-list"><a href="/produto/listar">Produtos</a><a href="/pedido/listar">Pedidos</a><a href="/usuario/listar">Usuários</a></div></details></li>
+    <li><a href="/loja">Loja</a></li>
+    <li><form th:action="@{/logout}" method="post"><button type="submit" class="btn btn-small btn-secondary">Sair</button></form></li>
+   </ul>
+  </div>
+ </nav>
+ <footer th:fragment="rodape" class="site-footer">Projeto acadêmico · Cristiano Ronaldo Ferreira Bueno</footer>
+</body></html>

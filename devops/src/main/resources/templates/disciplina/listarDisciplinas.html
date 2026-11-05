@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Disciplinas</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Sistema DevOps</div>
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/aluno/listar">Alunos</a></li>
+                <li><a href="/curso/listar">Cursos</a></li>
+                <li><a href="/professor/listar">Professores</a></li>
+                <li><a href="/disciplina/listar">Disciplinas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Disciplinas</h1>
+        <p>Gerencie as disciplinas oferecidas pelos cursos</p>
+    </div>
+
+    <div class="container">
+        <div class="alerta" th:if="${mensagem}">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Lista de Disciplinas</h2>
+                <a href="/disciplina/formulario" class="btn btn-primary">Nova Disciplina</a>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Sigla</th>
+                            <th>Carga Horária</th>
+                        <th>Professor</th>
+                            <th>ID Curso</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="disciplina : ${disciplinas}">
+                            <td th:text="${disciplina.idDisciplina}"></td>
+                            <td th:text="${disciplina.nomeDisciplina}"></td>
+                            <td th:text="${disciplina.siglaDisciplina}"></td>
+                            <td th:text="${disciplina.cargaHorariaDisciplina} + 'h'"></td>
+                            <td th:text="${disciplina.professor.nomeProfessor}"></td>
+                            <td th:text="${disciplina.idCurso}"></td>
+                            <td>
+                                <div class="acoes">
+                                    <a th:href="@{/disciplina/editar/{id}(id=${disciplina.idDisciplina})}" class="btn btn-small btn-info">Editar</a>
+                                    <form th:action="@{/disciplina/deletar/{id}(id=${disciplina.idDisciplina})}" method="post" class="inline-form" onsubmit="return confirm('Confirma a exclusão deste registro?')"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-small btn-danger" type="submit">Deletar</button></form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

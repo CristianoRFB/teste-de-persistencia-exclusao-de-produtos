@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>Loja | DevOpsCR</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body>
+ <div th:replace="~{fragments/nav :: loja}"></div>
+ <header class="page-header"><div class="container"><span class="eyebrow">Loja acadêmica</span><h1>Produtos e praticidade em um só lugar.</h1><p>Explore o catálogo, organize seu carrinho e registre seu pedido de demonstração.</p></div></header>
+ <main class="container">
+  <div class="alerta alerta-erro" role="alert" th:if="${erro}" th:text="${erro}"></div>
+  <section class="section-heading"><div><span class="eyebrow">Catálogo</span><h2>Escolha seus produtos</h2></div><a class="btn btn-secondary" href="/loja/pedidos">Ver meus pedidos</a></section>
+  <form class="store-search" th:action="@{/loja}" method="get" role="search"><label class="sr-only" for="busca">Buscar produtos</label>
+   <input id="busca" name="busca" th:value="${busca}" placeholder="Buscar nome ou descrição..."><button class="btn btn-primary">Pesquisar</button>
+  </form>
+  <div class="product-grid">
+   <article class="product-card" th:each="p : ${produtos}">
+    <a th:href="@{/loja/produto/{id}(id=${p.idProduto})}" class="product-card-link">
+     <div class="store-image"><img th:if="${p.imagem != null}" th:src="@{/produto/{id}/imagem(id=${p.idProduto})}" th:alt="${p.nomeProduto}"><span class="image-placeholder" th:unless="${p.imagem != null}">Imagem indisponível</span></div>
+     <div class="product-card-body"><h3 th:text="${p.nomeProduto}">Produto</h3><p th:text="${p.descricaoProduto}">Descrição</p><strong th:text="${#numbers.formatCurrency(p.precoProduto)}">R$ 0,00</strong><small th:text="${p.quantidadeEstoque > 0 ? 'Estoque: ' + p.quantidadeEstoque : 'Esgotado'}">Estoque</small></div>
+    </a>
+    <form th:action="@{/loja/carrinho/adicionar/{id}(id=${p.idProduto})}" method="post"><button class="btn btn-primary btn-full" type="submit" th:disabled="${p.quantidadeEstoque <= 0}">Adicionar ao carrinho</button></form>
+   </article>
+  </div>
+  <div class="empty-state" th:if="${#lists.isEmpty(produtos)}"><h3>Não encontramos produtos</h3><p>Tente outro termo ou aguarde novos cadastros.</p><a href="/loja" class="btn btn-secondary">Ver todos</a></div>
+ </main><div th:replace="~{fragments/nav :: rodape}"></div>
+</body></html>

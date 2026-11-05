@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Editar Item</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div th:replace="~{fragments/nav :: admin}"></div>
+    <div class="page-header">
+        <h1>Editar Item do Pedido</h1>
+        <p th:text="${'Pedido #' + item.pedido.idPedido}"></p>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <form th:action="@{/item-pedido/atualizar/{id}(id=${item.idItemDoPedido})}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="form-group"><label for="produtoId">Produto:</label><select id="produtoId" name="produtoId"
+                        required>
+                        <option th:each="produto : ${produtos}" th:value="${produto.idProduto}"
+                            th:text="${produto.nomeProduto}"
+                            th:selected="${produto.idProduto == item.produto.idProduto}"></option>
+                    </select></div>
+                <div class="form-group"><label for="quantidade">Quantidade:</label><input id="quantidade"
+                        name="quantidade" type="number" min="1" th:value="${item.quantidade}" required></div>
+                <div class="form-actions"><button class="btn btn-success" type="submit">Atualizar</button><a
+                        class="btn btn-secondary"
+                        th:href="@{/item-pedido/listar/{id}(id=${item.pedido.idPedido})}">Cancelar</a></div>
+            </form>
+        </div>
+    </div>
+<div th:replace="~{fragments/nav :: rodape}"></div></body>
+
+</html>

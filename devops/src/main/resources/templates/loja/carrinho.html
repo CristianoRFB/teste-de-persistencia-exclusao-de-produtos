@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Carrinho | DevOpsCR</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div th:replace="~{fragments/nav :: loja}"></div>
+<main class="container cart-page"><nav class="breadcrumb" aria-label="Trilha de navegação"><a href="/loja">Catálogo</a> <span>/</span> <span>Carrinho</span></nav>
+ <div class="section-heading"><div><span class="eyebrow">Sua seleção</span><h1>Carrinho</h1><p>Confira quantidades e valores antes de registrar seu pedido.</p></div></div>
+ <div class="alerta alerta-erro" role="alert" th:if="${erro}" th:text="${erro}"></div>
+ <div class="cart-list" th:unless="${#maps.isEmpty(itens)}">
+  <div class="cart-row" th:each="entry : ${itens}">
+   <div class="store-image cart-image"><img th:if="${entry.key.imagem != null}" th:src="@{/produto/{id}/imagem(id=${entry.key.idProduto})}" th:alt="${entry.key.nomeProduto}"><span th:unless="${entry.key.imagem != null}" class="image-placeholder">Sem imagem</span></div>
+   <div class="cart-info"><h2 th:text="${entry.key.nomeProduto}">Produto</h2><span th:text="${#numbers.formatCurrency(entry.key.precoProduto)}">R$ 0</span></div>
+   <form class="cart-quantity" th:action="@{/loja/carrinho/atualizar/{id}(id=${entry.key.idProduto})}" method="post"><label class="sr-only" th:for="'q-'+${entry.key.idProduto}">Quantidade</label><input class="quantity-input" th:id="'q-'+${entry.key.idProduto}" name="quantidade" type="number" min="0" max="1000" th:value="${entry.value}" required><button class="btn btn-small btn-secondary" type="submit">Atualizar</button></form>
+   <strong th:text="${#numbers.formatCurrency(subtotais[entry.key.idProduto])}">R$ 0</strong>
+   <form th:action="@{/loja/carrinho/remover/{id}(id=${entry.key.idProduto})}" method="post"><button class="btn btn-small btn-danger" type="submit" aria-label="Remover produto">Remover</button></form>
+  </div>
+ </div>
+ <section class="cart-checkout" th:unless="${#maps.isEmpty(itens)}">
+  <div class="cart-summary"><span>Total do pedido</span><strong th:text="${#numbers.formatCurrency(total)}">R$ 0</strong></div>
+  <p class="muted">Atividade acadêmica: ao confirmar, o pedido será registrado no sistema. Não há cobrança ou pagamento online.</p>
+  <form th:action="@{/loja/finalizar}" method="post"><input type="hidden" name="token" th:value="${checkoutToken}"><button type="submit" class="btn btn-primary btn-full">Confirmar pedido</button></form>
+ </section>
+ <div th:if="${#maps.isEmpty(itens)}" class="empty-state"><h2>Seu carrinho está vazio</h2><p>Comece adicionando um produto.</p><a href="/loja" class="btn btn-primary">Explorar catálogo</a></div>
+</main><div th:replace="~{fragments/nav :: rodape}"></div></body></html>

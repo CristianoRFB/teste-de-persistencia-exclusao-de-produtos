@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Painel Administrativo | DevOpsCR</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div th:replace="~{fragments/nav :: admin}"></div>
+<header class="page-header"><div class="container"><span class="eyebrow">Área administrativa</span><h1>Painel de gerenciamento</h1><p>Organize cadastros acadêmicos, produtos e pedidos em um só lugar.</p></div></header>
+<main class="container">
+ <section class="module-group" aria-labelledby="academico"><div class="section-heading"><div><span class="eyebrow">Acadêmico</span><h2 id="academico">Gestão acadêmica</h2><p>Alunos, cursos, professores e disciplinas.</p></div></div>
+ <div class="module-grid">
+  <a class="module-card" href="/aluno/listar"><span class="module-tag">01</span><h3>Alunos</h3><p>Cadastros e informações dos estudantes.</p><span class="module-cta">Gerenciar alunos →</span></a>
+  <a class="module-card" href="/curso/listar"><span class="module-tag">02</span><h3>Cursos</h3><p>Lista e dados dos cursos.</p><span class="module-cta">Gerenciar cursos →</span></a>
+  <a class="module-card" href="/professor/listar"><span class="module-tag">03</span><h3>Professores</h3><p>Cadastro e atualização de docentes.</p><span class="module-cta">Gerenciar professores →</span></a>
+  <a class="module-card" href="/disciplina/listar"><span class="module-tag">04</span><h3>Disciplinas</h3><p>Disciplinas e relacionamentos.</p><span class="module-cta">Gerenciar disciplinas →</span></a>
+ </div></section>
+ <section class="module-group" aria-labelledby="comercial"><div class="section-heading"><div><span class="eyebrow">Comercial</span><h2 id="comercial">Gestão da loja</h2><p>Catálogo, estoque, pedidos e usuários.</p></div><a href="/loja" class="btn btn-secondary">Abrir a loja</a></div>
+ <div class="module-grid">
+  <a class="module-card" href="/produto/listar"><span class="module-tag">05</span><h3>Produtos</h3><p>Imagens, preço e estoque.</p><span class="module-cta">Gerenciar produtos →</span></a>
+  <a class="module-card" href="/pedido/listar"><span class="module-tag">06</span><h3>Pedidos</h3><p>Visualizar registros e situação.</p><span class="module-cta">Acompanhar pedidos →</span></a>
+  <a class="module-card" href="/usuario/listar"><span class="module-tag">07</span><h3>Usuários</h3><p>Contas de acesso e permissões.</p><span class="module-cta">Gerenciar usuários →</span></a>
+ </div></section>
+</main><div th:replace="~{fragments/nav :: rodape}"></div></body></html>

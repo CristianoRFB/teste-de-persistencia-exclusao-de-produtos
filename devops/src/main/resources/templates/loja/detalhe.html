@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title th:text="${produto.nomeProduto} + ' | DevOpsCR'">Produto</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div th:replace="~{fragments/nav :: loja}"></div>
+<main class="container">
+ <nav class="breadcrumb" aria-label="Trilha de navegação"><a href="/loja">Catálogo</a> <span aria-hidden="true">/</span> <span th:text="${produto.nomeProduto}">Produto</span></nav>
+ <section class="detail-card">
+  <div class="store-image detail-image"><img th:if="${produto.imagem != null}" th:src="@{/produto/{id}/imagem(id=${produto.idProduto})}" th:alt="${produto.nomeProduto}"><span th:unless="${produto.imagem != null}" class="image-placeholder">Sem imagem</span></div>
+  <div><span class="eyebrow">Detalhes do produto</span><h1 th:text="${produto.nomeProduto}">Produto</h1><p th:text="${produto.descricaoProduto}">Descrição</p>
+   <strong class="detail-price" th:text="${#numbers.formatCurrency(produto.precoProduto)}">R$ 0,00</strong><p class="muted" th:text="${produto.quantidadeEstoque > 0 ? 'Disponíveis: ' + produto.quantidadeEstoque : 'Esgotado'}">Estoque</p>
+   <form th:action="@{/loja/carrinho/adicionar/{id}(id=${produto.idProduto})}" method="post" class="purchase-form">
+    <label for="quantidade">Quantidade</label><input id="quantidade" class="quantity-input" name="quantidade" type="number" min="1" th:max="${produto.quantidadeEstoque}" value="1" required>
+    <button type="submit" class="btn btn-primary" th:disabled="${produto.quantidadeEstoque <= 0}">Adicionar ao carrinho</button>
+   </form><a href="/loja" class="text-link">Voltar ao catálogo</a>
+  </div>
+ </section>
+</main><div th:replace="~{fragments/nav :: rodape}"></div></body></html>
