@@ -1,0 +1,96 @@
+name: Java CI
+
+on:
+  push:
+    branches: [main, "feat/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: devops
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: devops/pom.xml
+      - name: Build and run tests
+        run: |
+          chmod +x mvnw
+          ./mvnw -B verify
+
+  screenshots:
+    needs: build-and-test
+    if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/feat/devopscr-checkout-wip-20261029' && github.event_name == 'push')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: devops/pom.xml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare isolated test database and generated credentials
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=dev" >> "$GITHUB_ENV"
+          echo "DB_URL=jdbc:h2:mem:devops_screens;MODE=PostgreSQL;DB_CLOSE_DELAY=-1" >> "$GITHUB_ENV"
+          echo "DB_USERNAME=sa" >> "$GITHUB_ENV"
+          echo "DB_PASSWORD=" >> "$GITHUB_ENV"
+          ADMIN_PASS="$(openssl rand -hex 18)"
+          USER_PASS="$(openssl rand -hex 18)"
+          echo "::add-mask::$ADMIN_PASS"
+          echo "::add-mask::$USER_PASS"
+          echo "DEV_ADMIN_PASSWORD=$ADMIN_PASS" >> "$GITHUB_ENV"
+          echo "DEV_USER_PASSWORD=$USER_PASS" >> "$GITHUB_ENV"
+      - name: Install test browser
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium --with-deps
+      - name: Start Spring Boot against H2 (demo data only)
+        run: |
+          cd devops
+          chmod +x mvnw
+          nohup ./mvnw -B spring-boot:run > ../app-screenshots.log 2>&1 &
+          echo $! > ../app-screenshots.pid
+      - name: Wait for local server
+        run: |
+          for i in $(seq 1 90); do
+            if curl -fsS -o /dev/null http://localhost:8080/login; then exit 0; fi
+            sleep 2
+          done
+          tail -100 app-screenshots.log
+          exit 1
+      - name: Exercise browser flows and capture screenshots
+        run: node scripts/capture-screenshots.mjs
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devopscr-actual-screenshots
+          path: docs/screenshots/*.png
+          if-no-files-found: ignore
+      - name: Commit verified captures and README gallery
+        if: github.ref == 'refs/heads/feat/devopscr-checkout-wip-20261029' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/screenshots/*.png README.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: add verified in-browser screenshots"
+            git push origin HEAD:feat/devopscr-checkout-wip-20261029
+          fi
