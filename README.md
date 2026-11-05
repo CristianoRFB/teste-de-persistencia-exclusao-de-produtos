@@ -4,6 +4,30 @@
 
 [![Java CI](https://github.com/CristianoRFB/teste-de-persistencia-exclusao-de-produtos/actions/workflows/java-ci.yml/badge.svg)](https://github.com/CristianoRFB/teste-de-persistencia-exclusao-de-produtos/actions/workflows/java-ci.yml)
 
+## Sobre esta atividade acadêmica
+
+Este repositório documenta uma **atividade prática do curso superior de Tecnologia em Análise e Desenvolvimento de Sistemas (ADS)**, realizada na **Faculdade de Tecnologia de Jales (Fatec Jales)**, instituição do Centro Paula Souza, no ano de **2026**.
+
+| Informação | Descrição |
+| --- | --- |
+| **Instituição** | Fatec Jales — Faculdade de Tecnologia de Jales |
+| **Curso** | Tecnologia em Análise e Desenvolvimento de Sistemas (ADS) |
+| **Disciplina** | Integração e Entrega Contínua (DevOps) |
+| **Atividade** | Qualidade e Testes de Software |
+| **Tema atribuído** | Tema 11 — Teste de persistência: exclusão de produtos |
+| **Estudante** | Cristiano Ronaldo Ferreira Bueno |
+| **Ano** | 2026 |
+
+### Proposta da atividade
+
+A proposta acadêmica consiste em **pesquisar, implementar, executar e demonstrar técnicas de teste e qualidade de software** aplicadas a um projeto de e-commerce já existente em **Java com Spring Boot**. Além da pesquisa teórica, a atividade exige implementação funcional, evidências de execução, documentação e apresentação prática para a turma.
+
+Para o **Tema 11**, o objetivo é verificar se a exclusão de produtos funciona corretamente no banco de dados, respeitando o modelo de exclusão física ou lógica adotado e preservando a integridade das informações relacionadas.
+
+Este trabalho utiliza como ponto de partida o projeto [DevOpsCR](https://github.com/CristianoRFB/devopscr), adaptado especificamente para essa avaliação. O foco é demonstrar o ciclo de qualidade **falha identificada → teste automatizado → correção → validação dos resultados**.
+
+> **Finalidade educacional:** projeto desenvolvido como exercício de graduação. Não se trata de uma aplicação comercial pronta para produção.
+
 Atividade prática desenvolvida sobre o projeto original **[DevOpsCR](https://github.com/CristianoRFB/devopscr)** (Java 17, Spring Boot 4, Thymeleaf, JPA, PostgreSQL e H2 para testes). O repositório de origem foi mantido intacto. Esta cópia contém a implementação específica do Tema 11, melhorias visuais e testes automatizados.
 
 ## Problema reproduzido
@@ -68,4 +92,4 @@ Veja o [relatório detalhado](docs/TEMA11_RELATORIO.md), com a metodologia, os r
 
 ---
 
-**Cristiano Ronaldo Ferreira Bueno** · Fatec Jales · Projeto acadêmico. Não há cobrança real, gateway de pagamento ou prontidão de produção.
+**Cristiano Ronaldo Ferreira Bueno** · ADS — Fatec Jales · Integração e Entrega Contínua (DevOps) · 2026. Não há cobrança real, gateway de pagamento ou prontidão de produção.
