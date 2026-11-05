@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Alunos</title>
+    <link rel="stylesheet" href="/css/styles.css?v=3">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Sistema DevOps</div>
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/aluno/listar">Alunos</a></li>
+                <li><a href="/curso/listar">Cursos</a></li>
+                <li><a href="/professor/listar">Professores</a></li>
+                <li><a href="/disciplina/listar">Disciplinas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Lista de Alunos</h1>
+        <p>Visualize, edite e gerencie os alunos cadastrados no sistema</p>
+    </div>
+
+    <div class="container">
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Alunos Cadastrados</h2>
+                <a class="btn btn-primary" th:href="@{/aluno/formulario}">
+                    Cadastrar Novo Aluno
+                </a>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Endereço</th>
+                            <th>CPF</th>
+                            <th>RA</th>
+                            <th>Curso</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="aluno : ${alunos}">
+                            <td th:text="${aluno.idAluno}">1</td>
+                            <td th:text="${aluno.nomeAluno}">Nome</td>
+                            <td th:text="${aluno.emailAluno}">email@email.com</td>
+                            <td th:text="${aluno.telefoneAluno}">(00) 00000-0000</td>
+                            <td th:text="${aluno.enderecoAluno}">Endereço</td>
+                            <td th:text="${aluno.cpfAluno}">000.000.000-00</td>
+                            <td th:text="${aluno.raAluno}">0000</td>
+
+                            <td th:text="${aluno.curso != null ? aluno.curso.nomeCurso : 'Sem curso'}">
+                                Curso
+                            </td>
+
+                            <td>
+                                <div class="acoes">
+                                    <a 
+                                        class="btn btn-small btn-info" 
+                                        th:href="@{/aluno/editar/{id}(id=${aluno.idAluno})}">
+                                        Editar
+                                    </a>
+
+                                    <form th:action="@{/aluno/deletar/{id}(id=${aluno.idAluno})}" method="post" class="inline-form" onsubmit="return confirm('Confirma a exclusão deste registro?')"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-small btn-danger" type="submit">Excluir</button></form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(alunos)}">
+                            <td colspan="9" style="text-align: center;">
+                                Nenhum aluno cadastrado.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

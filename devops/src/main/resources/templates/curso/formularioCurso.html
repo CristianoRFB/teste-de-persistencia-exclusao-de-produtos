@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Curso</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div th:replace="~{fragments/nav :: admin}"></div>
+
+    <div class="page-header">
+        <h1 th:if="${curso.idCurso == null}">Novo Curso</h1>
+        <h1 th:unless="${curso.idCurso == null}">Editar Curso</h1>
+        <p>Preencha os dados do curso</p>
+    </div>
+
+    <div class="container">
+        <div class="form-container">
+            <form th:if="${curso.idCurso == null}" th:action="@{/curso/salvar}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <h2 class="form-title">Cadastro de Curso</h2>
+
+                <div class="form-group">
+                    <label for="nomeCurso">Nome do Curso:</label>
+                    <input type="text" id="nomeCurso" name="nomeCurso" th:value="${curso.nomeCurso}" placeholder="Digite o nome do curso" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="periodoCurso">Período:</label>
+                    <input type="text" id="periodoCurso" name="periodoCurso" th:value="${curso.periodoCurso}" placeholder="Ex: Noturno, Matutino" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cargahorariaCurso">Carga Horária Total:</label>
+                    <input type="text" id="cargahorariaCurso" name="cargahorariaCurso" th:value="${curso.cargahorariaCurso}" placeholder="0000" data-mask="number" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <a href="/curso/listar" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+
+            <form th:unless="${curso.idCurso == null}" th:action="@{/curso/atualizar/{id}(id=${curso.idCurso})}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <h2 class="form-title">Editar Curso</h2>
+
+                <input type="hidden" name="idCurso" th:value="${curso.idCurso}">
+
+                <div class="form-group">
+                    <label for="nomeCurso">Nome do Curso:</label>
+                    <input type="text" id="nomeCurso" name="nomeCurso" th:value="${curso.nomeCurso}" placeholder="Digite o nome do curso" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="periodoCurso">Período:</label>
+                    <input type="text" id="periodoCurso" name="periodoCurso" th:value="${curso.periodoCurso}" placeholder="Ex: Noturno, Matutino" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cargahorariaCurso">Carga Horária Total:</label>
+                    <input type="text" id="cargahorariaCurso" name="cargahorariaCurso" th:value="${curso.cargahorariaCurso}" placeholder="0000" data-mask="number" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                    <a href="/curso/listar" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/mask.js"></script>
+<div th:replace="~{fragments/nav :: rodape}"></div></body>
+</html>

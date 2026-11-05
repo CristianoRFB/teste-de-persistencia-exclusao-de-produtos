@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Cursos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Sistema DevOps</div>
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/aluno/listar">Alunos</a></li>
+                <li><a href="/curso/listar">Cursos</a></li>
+                <li><a href="/professor/listar">Professores</a></li>
+                <li><a href="/disciplina/listar">Disciplinas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Cursos</h1>
+        <p>Gerencie os cursos oferecidos pela instituição</p>
+    </div>
+
+    <div class="container">
+        <div class="alerta" th:if="${mensagem}">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Lista de Cursos</h2>
+                <a href="/curso/formulario" class="btn btn-primary">Novo Curso</a>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Período</th>
+                            <th>Carga Horária</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="curso : ${cursos}">
+                            <td th:text="${curso.idCurso}"></td>
+                            <td th:text="${curso.nomeCurso}"></td>
+                            <td th:text="${curso.periodoCurso}"></td>
+                            <td th:text="${curso.cargahorariaCurso} + 'h'"></td>
+                            <td>
+                                <div class="acoes">
+                                    <a th:href="@{/curso/editar/{id}(id=${curso.idCurso})}" class="btn btn-small btn-info">Editar</a>
+                                    <form th:action="@{/curso/deletar/{id}(id=${curso.idCurso})}" method="post" class="inline-form" onsubmit="return confirm('Confirma a exclusão deste registro?')"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-small btn-danger" type="submit">Deletar</button></form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</body>
+</html>
