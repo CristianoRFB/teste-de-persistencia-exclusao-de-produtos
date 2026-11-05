@@ -39,6 +39,12 @@ public class ProdutoController {
         return "produto/listarProdutos";
     }
 
+    @GetMapping("/arquivados")
+    public String arquivados(Model model) {
+        model.addAttribute("produtos", produtoService.listarArquivados());
+        return "produto/arquivados";
+    }
+
     @GetMapping("/formulario")
     public String formulario(Model model) {
         model.addAttribute("produto", new Produto());
@@ -93,9 +99,24 @@ public class ProdutoController {
     //Metodo para excluir um produto por ID
     @PostMapping("/deletar/{id}")
     public String deletar(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        produtoService.deletar(id);
-        redirectAttributes.addFlashAttribute("mensagem", "Produto deletado com sucesso!");
+        try {
+            produtoService.deletar(id);
+            redirectAttributes.addFlashAttribute("mensagem", "Produto arquivado com sucesso. Os pedidos anteriores foram preservados.");
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("erro", ex.getMessage());
+        }
         return "redirect:/produto/listar";
+    }
+
+    @PostMapping("/reativar/{id}")
+    public String reativar(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            produtoService.reativar(id);
+            redirectAttributes.addFlashAttribute("mensagem", "Produto reativado e disponível novamente no catálogo.");
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("erro", ex.getMessage());
+        }
+        return "redirect:/produto/arquivados";
     }
 
     @GetMapping("/{id}/imagem")

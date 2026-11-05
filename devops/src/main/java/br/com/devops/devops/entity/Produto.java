@@ -47,6 +47,9 @@ public class Produto {
     @Column(nullable = false)
     private Integer quantidadeEstoque;
 
+    @Column(name = "ativo", nullable = false, columnDefinition = "boolean default true")
+    private Boolean ativo = Boolean.TRUE;
+
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "imagem", columnDefinition = "bytea")
     private byte[] imagem;

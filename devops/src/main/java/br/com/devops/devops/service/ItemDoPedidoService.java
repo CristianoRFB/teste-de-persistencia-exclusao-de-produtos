@@ -63,7 +63,7 @@ public class ItemDoPedidoService {
             throw new IllegalArgumentException("A quantidade deve ser maior que zero");
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
-        Produto produto = produtoRepository.findById(produtoId)
+        Produto produto = produtoRepository.findByIdProdutoAndAtivoTrue(produtoId)
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
         item.setPedido(pedido);
         item.setProduto(produto);
