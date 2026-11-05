@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Produto</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body>
+<div th:replace="~{fragments/nav :: admin}"></div>
+<div class="page-header"><h1 th:text="${produto.idProduto == null ? 'Novo Produto' : 'Editar Produto'}"></h1><p>Preencha os dados do produto</p></div>
+<div class="container"><div class="form-container">
+<form th:object="${produto}" th:action="${produto.idProduto == null} ? @{/produto/salvar} : @{/produto/atualizar/{id}(id=${produto.idProduto})}" method="post" enctype="multipart/form-data"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+ <div class="form-group"><label for="nomeProduto">Nome:</label><input id="nomeProduto" th:field="*{nomeProduto}" type="text" maxlength="100" required></div><small class="field-error" th:errors="*{nomeProduto}"></small>
+ <div class="form-group"><label for="descricaoProduto">Descrição:</label><textarea id="descricaoProduto" th:field="*{descricaoProduto}" maxlength="255" required></textarea></div><small class="field-error" th:errors="*{descricaoProduto}"></small>
+ <div class="form-group"><label for="precoProduto">Preço (R$):</label><input id="precoProduto" th:field="*{precoProduto}" type="number" min="0.01" step="0.01" required></div><small class="field-error" th:errors="*{precoProduto}"></small>
+ <div class="form-group"><label for="quantidadeEstoque">Quantidade em estoque:</label><div class="quantity-control"><button type="button" aria-label="Diminuir quantidade" onclick="this.nextElementSibling.stepDown()">−</button><input id="quantidadeEstoque" th:field="*{quantidadeEstoque}" type="number" min="0" step="1" inputmode="numeric" required><button type="button" aria-label="Aumentar quantidade" onclick="this.previousElementSibling.stepUp()">+</button></div></div><small class="field-error" th:errors="*{quantidadeEstoque}"></small>
+ <div class="form-group"><label for="arquivoImagem">Imagem do produto:</label><div class="image-upload"><img id="imagePreview" class="image-preview" th:classappend="${produto.idProduto != null and produto.imagem != null} ? '' : ' is-empty'" th:src="${produto.idProduto != null and produto.imagem != null} ? @{/produto/{id}/imagem(id=${produto.idProduto})} : ''" alt="Prévia da imagem do produto"><div><input id="arquivoImagem" name="arquivoImagem" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><small>JPG, PNG, WebP ou GIF, até 5 MB. Ao editar, deixe vazio para manter a imagem atual.</small></div></div></div><small class="field-error" th:if="${erroImagem}" th:text="${erroImagem}"></small>
+ <div class="form-actions"><button class="btn btn-success" type="submit" th:text="${produto.idProduto == null ? 'Salvar' : 'Atualizar'}"></button><a class="btn btn-secondary" href="/produto/listar">Cancelar</a></div>
+</form></div></div>
+<script>document.getElementById('arquivoImagem').addEventListener('change',function(){if(!this.files.length)return;const p=document.getElementById('imagePreview');p.src=URL.createObjectURL(this.files[0]);p.classList.remove('is-empty');});</script>
+<div th:replace="~{fragments/nav :: rodape}"></div></body></html>

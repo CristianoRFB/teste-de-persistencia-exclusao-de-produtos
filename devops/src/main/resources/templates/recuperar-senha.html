@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - DevOpsCR</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-page">
+    <main class="auth-layout">
+        <section class="auth-panel">
+            <div class="auth-brand">
+                <span class="auth-badge">DevOpsCR</span>
+                <h1>Recuperar senha</h1>
+                <p>Informe o email cadastrado para receber o link de redefinicao.</p>
+            </div>
+
+            <form class="auth-form" th:action="@{/recuperar-senha}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="alerta alerta-sucesso" th:if="${mensagemSucesso}">
+                    <span th:text="${mensagemSucesso}"></span>
+                </div>
+
+                <div class="alerta alerta-erro" th:if="${mensagemErro}">
+                    <span th:text="${mensagemErro}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu email cadastrado" required autofocus>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Enviar link</button>
+
+                <div class="auth-links">
+                    <a th:href="@{/login}">Voltar para o login</a>
+                </div>
+            </form>
+        </section>
+    </main>
+<div th:replace="~{fragments/nav :: rodape}"></div></body>
+</html>

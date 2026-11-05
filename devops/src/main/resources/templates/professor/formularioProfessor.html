@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Professor</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div th:replace="~{fragments/nav :: admin}"></div>
+
+    <div class="page-header">
+        <h1 th:if="${professor.idProfessor == null}">Novo Professor</h1>
+        <h1 th:unless="${professor.idProfessor == null}">Editar Professor</h1>
+        <p>Preencha os dados do professor</p>
+    </div>
+
+    <div class="container">
+        <div class="form-container">
+            <form th:if="${professor.idProfessor == null}" th:action="@{/professor/salvar}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <h2 class="form-title">Cadastro de Professor</h2>
+
+                <div class="form-group">
+                    <label for="nomeProfessor">Nome Completo:</label>
+                    <input type="text" id="nomeProfessor" name="nomeProfessor" th:value="${professor.nomeProfessor}" placeholder="Digite o nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefoneProfessor">Telefone:</label>
+                    <input type="text" id="telefoneProfessor" name="telefoneProfessor" th:value="${professor.telefoneProfessor}" placeholder="(00) 9 0000-0000" data-mask="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="graduacaoProfessor">Graduação:</label>
+                    <input type="text" id="graduacaoProfessor" name="graduacaoProfessor" th:value="${professor.graduacaoProfessor}" placeholder="Ex: Mestrado em Computação" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rmProfessor">RM (Registro de Matrícula):</label>
+                    <input type="text" id="rmProfessor" name="rmProfessor" th:value="${professor.rmProfessor}" placeholder="00000-0" data-mask="rm" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <a href="/professor/listar" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+
+            <form th:unless="${professor.idProfessor == null}" th:action="@{/professor/atualizar/{id}(id=${professor.idProfessor})}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <h2 class="form-title">Editar Professor</h2>
+
+                <input type="hidden" name="idProfessor" th:value="${professor.idProfessor}">
+
+                <div class="form-group">
+                    <label for="nomeProfessor">Nome Completo:</label>
+                    <input type="text" id="nomeProfessor" name="nomeProfessor" th:value="${professor.nomeProfessor}" placeholder="Digite o nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefoneProfessor">Telefone:</label>
+                    <input type="text" id="telefoneProfessor" name="telefoneProfessor" th:value="${professor.telefoneProfessor}" placeholder="(00) 9 0000-0000" data-mask="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="graduacaoProfessor">Graduação:</label>
+                    <input type="text" id="graduacaoProfessor" name="graduacaoProfessor" th:value="${professor.graduacaoProfessor}" placeholder="Ex: Mestrado em Computação" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rmProfessor">RM (Registro de Matrícula):</label>
+                    <input type="text" id="rmProfessor" name="rmProfessor" th:value="${professor.rmProfessor}" placeholder="00000-0" data-mask="rm" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                    <a href="/professor/listar" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/mask.js"></script>
+<div th:replace="~{fragments/nav :: rodape}"></div></body>
+</html>

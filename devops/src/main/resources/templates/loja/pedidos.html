@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meus pedidos | DevOpsCR</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div th:replace="~{fragments/nav :: loja}"></div><main class="container">
+ <nav class="breadcrumb" aria-label="Trilha de navegação"><a href="/loja">Catálogo</a> <span>/</span> <span>Meus pedidos</span></nav>
+ <div class="section-heading"><div><span class="eyebrow">Histórico</span><h1>Meus pedidos</h1><p>Acompanhe pedidos registrados nesta conta.</p></div></div>
+ <div class="alerta alerta-erro" th:if="${erro}" th:text="${erro}" role="alert"></div>
+ <div class="table-container" th:unless="${#lists.isEmpty(pedidos)}"><div class="table-header"><h2>Pedidos realizados</h2></div><div class="table-scroll"><table class="tabela"><thead><tr><th>Número</th><th>Data</th><th>Situação</th><th>Total</th><th>Ação</th></tr></thead><tbody>
+  <tr th:each="pedido : ${pedidos}"><td th:text="${'#' + pedido.idPedido}"></td><td th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy')}"></td><td th:text="${pedido.status}"></td><td th:text="${#numbers.formatCurrency(pedido.valorTotal)}"></td><td><a class="btn btn-small btn-secondary" th:href="@{/loja/pedidos/{id}(id=${pedido.idPedido})}">Detalhes</a></td></tr>
+ </tbody></table></div></div>
+ <div class="empty-state" th:if="${#lists.isEmpty(pedidos)}"><h2>Nenhum pedido ainda</h2><p>Suas compras de demonstração aparecerão aqui.</p><a href="/loja" class="btn btn-primary">Voltar à loja</a></div>
+</main><div th:replace="~{fragments/nav :: rodape}"></div></body></html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Pedido</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div th:replace="~{fragments/nav :: admin}"></div>
+    <div class="page-header">
+        <h1 th:text="${pedido.idPedido == null ? 'Novo Pedido' : 'Editar Pedido'}"></h1>
+        <p>Preencha os dados gerais do pedido</p>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <form
+                th:action="${pedido.idPedido == null} ? @{/pedido/salvar} : @{/pedido/atualizar/{id}(id=${pedido.idPedido})}"
+                method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="form-group"><label for="alunoId">Aluno:</label><select id="alunoId" name="alunoId" required>
+                        <option value="">Selecione um aluno</option>
+                        <option th:each="aluno : ${alunos}" th:value="${aluno.idAluno}"
+                            th:text="${aluno.nomeAluno + ' - RA: ' + aluno.raAluno}"
+                            th:selected="${pedido.aluno != null and pedido.aluno.idAluno == aluno.idAluno}"></option>
+                    </select></div>
+                <div class="form-group"><label for="dataPedido">Data:</label><input id="dataPedido" name="dataPedido"
+                        type="date" th:value="${pedido.dataPedido}" required></div>
+                <div class="form-group"><label for="status">Status:</label><select id="status" name="status" required>
+                        <option value="PENDENTE" th:selected="${pedido.status == null or pedido.status == 'PENDENTE'}">
+                            Pendente</option>
+                        <option value="PAGO" th:selected="${pedido.status == 'PAGO'}">Pago</option>
+                        <option value="ENVIADO" th:selected="${pedido.status == 'ENVIADO'}">Enviado</option>
+                        <option value="ENTREGUE" th:selected="${pedido.status == 'ENTREGUE'}">Entregue</option>
+                        <option value="CANCELADO" th:selected="${pedido.status == 'CANCELADO'}">Cancelado</option>
+                    </select></div>
+                <div class="form-actions"><button class="btn btn-success" type="submit"
+                        th:text="${pedido.idPedido == null ? 'Salvar e adicionar itens' : 'Atualizar'}"></button><a
+                        class="btn btn-secondary" href="/pedido/listar">Cancelar</a></div>
+            </form>
+        </div>
+    </div>
+<div th:replace="~{fragments/nav :: rodape}"></div></body>
+
+</html>

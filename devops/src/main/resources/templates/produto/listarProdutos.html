@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Sistema DevOps</div>
+            <ul class="nav-links">
+                <li><a href="/home">Início</a></li>
+                <li><a href="/produto/listar">Produtos</a></li>
+                <li><a href="/pedido/listar">Pedidos</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="page-header">
+        <h1>Produtos</h1>
+        <p>Gerencie o catálogo e o estoque</p>
+    </div>
+    <div class="container">
+        <div class="alerta" th:if="${mensagem}" th:text="${mensagem}"></div>
+        <div class="alerta" th:if="${erro}" th:text="${erro}"></div>
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Lista de Produtos</h2><a class="btn btn-primary" href="/produto/formulario">Novo Produto</a>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="produto : ${produtos}">
+                            <td th:text="${produto.idProduto}"></td><td><div class="product-thumb-wrap"><img th:if="${produto.imagem != null}" class="product-thumb" th:src="@{/produto/{id}/imagem(id=${produto.idProduto})}" th:alt="${produto.nomeProduto}"><span th:unless="${produto.imagem != null}" class="product-placeholder">Sem imagem</span></div></td>
+                            <td th:text="${produto.nomeProduto}"></td>
+                            <td th:text="${produto.descricaoProduto}"></td>
+                            <td th:text="${#numbers.formatCurrency(produto.precoProduto)}"></td>
+                            <td th:text="${produto.quantidadeEstoque}"></td>
+                            <td>
+                                <div class="acoes"><a class="btn btn-small btn-info"
+                                        th:href="@{/produto/editar/{id}(id=${produto.idProduto})}">Editar</a><form th:action="@{/produto/deletar/{id}(id=${produto.idProduto})}" method="post" class="inline-form" onsubmit="return confirm('Confirma a exclusão deste registro?')"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><button class="btn btn-small btn-danger" type="submit">Deletar</button></form></div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(produtos)}">
+                            <td colspan="7">Nenhum produto cadastrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
